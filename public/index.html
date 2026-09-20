@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NULLBYTE — a personal collection of CTF writeups, security notes, and things learned by taking things apart.">
+  <meta name="theme-color" content="#f3f3eb">
+  <title>NULLBYTE — curiosity, dissected.</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#entries">Skip to entries</a>
+  <div class="site-shell">
+    <header class="header">
+      <a href="#" class="brand" aria-label="NULLBYTE home"><span class="brand-icon">n<span>_</span></span><span>NULLBYTE<span class="brand-period">.</span></span></a>
+      <nav aria-label="Main navigation">
+        <a href="#entries" class="nav-link active" data-nav="all">/ index</a>
+        <a href="#entries" class="nav-link" data-nav="writeup">/ writeups</a>
+        <a href="#entries" class="nav-link" data-nav="note">/ notes</a>
+        <button class="nav-link" id="about-button">/ about</button>
+      </nav>
+      <button class="theme-button" id="theme-button" aria-label="Switch to dark theme" title="Toggle theme">◐</button>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="status-dot"></span> A PERSONAL LOG OF BREAKING & LEARNING</div>
+          <h1 id="hero-title">Curiosity.<br><span class="dissected">Dissected.<svg viewBox="0 0 460 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 10 Q180 -2 456 5 M46 15 Q238 5 432 10"/></svg></span><span class="title-asterisk">*</span></h1>
+          <p>Taking things apart to see how they work.<br>CTF writeups, security rabbit holes, and notes to my future self.</p>
+          <a href="#entries" class="explore-link">Explore the log <span>↘</span></a>
+        </div>
+        <div class="hero-art" aria-label="Decorative orbital diagram">
+          <div class="art-top"><span>FIG. 001 — THE RABBIT HOLE</span><span>[ LIVE ]</span></div>
+          <svg class="orbital" viewBox="0 0 420 300" aria-hidden="true">
+            <defs><pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="currentColor" opacity=".25"/></pattern></defs>
+            <path d="M210 15 V285 M55 150 H365" class="art-axis"/>
+            <circle cx="210" cy="150" r="112" fill="url(#dots)"/>
+            <g class="orbit-lines" transform="translate(210 150) rotate(-28)"><ellipse rx="147" ry="58"/><ellipse rx="147" ry="58" transform="rotate(60)"/><ellipse rx="147" ry="58" transform="rotate(120)"/><ellipse rx="112" ry="112" class="orbit-circle"/></g>
+            <circle cx="210" cy="150" r="36" class="core"/><text x="210" y="160" text-anchor="middle" class="core-text">0x</text>
+            <rect x="325" y="83" width="11" height="11" class="orbit-node" transform="rotate(15 330 88)"/><circle cx="91" cy="213" r="5" class="orbit-point"/>
+            <text x="55" y="45" class="art-label">01001110</text><text x="299" y="265" class="art-label">0xDEADBEEF</text>
+            <path d="M24 44 V25 H43 M377 25 H396 V44 M24 256 V275 H43 M377 275 H396 V256" class="art-corners"/>
+          </svg>
+          <div class="art-bottom"><span>INPUT: CURIOSITY</span><span>OUTPUT: <b>UNDERSTANDING_</b></span></div>
+        </div>
+      </section>
+      <div class="ticker" aria-label="Areas of interest"><span><i>↳</i> FOLLOWING THE SIGNAL</span><span>WEB EXPLOITATION</span><b>×</b><span>REVERSE ENGINEERING</span><b>×</b><span>CRYPTOGRAPHY</span><b>×</b><span>MAKING & BREAKING</span><span class="ticker-end">[ 0x01 ]</span></div>
+      <div class="content-grid">
+        <section class="entries" id="entries" aria-labelledby="entries-title">
+          <div class="section-heading"><h2 id="entries-title">The log<span class="small-count" id="entry-count">06</span></h2><span class="mono muted">LATEST TRANSMISSIONS ↙</span></div>
+          <div class="entry-tools">
+            <div class="filters" role="group" aria-label="Filter entries">
+              <button class="filter active" data-filter="all" aria-pressed="true">All entries <span>06</span></button>
+              <button class="filter" data-filter="writeup" aria-pressed="false">Writeups <span>03</span></button>
+              <button class="filter" data-filter="note" aria-pressed="false">Notes <span>03</span></button>
+            </div>
+            <button class="search-toggle" id="search-toggle" aria-label="Search entries" title="Search entries (/)" aria-expanded="false" aria-controls="search-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><kbd>/</kbd></button>
+          </div>
+          <div id="search-panel" class="search-panel" hidden><label for="search-input" class="mono">SEARCH THE LOG</label><input type="search" id="search-input" placeholder="Try web, heap, or a title…" autocomplete="off"><button id="clear-search" aria-label="Clear and close search">×</button></div>
+          <div id="post-list" aria-live="polite"></div>
+          <noscript><p>Enable JavaScript to browse the sample entries in this template.</p></noscript>
+          <div class="log-end"><span>↳</span> You've reached the end. The rabbit hole hasn't.<span class="end-square">■</span></div>
+        </section>
+        <aside class="sidebar" aria-label="About this blog">
+          <section class="about-card">
+            <div class="card-label"><span>WHO'S BEHIND THE KEYBOARD?</span><span>↗</span></div>
+            <div class="avatar" aria-hidden="true">[<span>¬</span>_<span>¬</span>]</div>
+            <h2>Hey, I'm your_alias<span class="lime-text">.</span></h2>
+            <p>Student by day. Flag hunter by night. I learn by breaking things, then write down the interesting bits.</p>
+            <div class="availability"><span class="status-dot"></span> ALWAYS IN LEARNING MODE</div>
+            <button id="more-about" class="about-link">More about me <span>↗</span></button>
+          </section>
+          <section class="directory">
+            <div class="side-heading"><h2>Rabbit holes</h2><span>~/topics</span></div>
+            <button data-topic="web"><span><i>#</i> web exploitation</span><span>02 ↗</span></button>
+            <button data-topic="pwn"><span><i>#</i> binary exploitation</span><span>01 ↗</span></button>
+            <button data-topic="reverse"><span><i>#</i> reverse engineering</span><span>01 ↗</span></button>
+            <button data-topic="crypto"><span><i>#</i> cryptography</span><span>01 ↗</span></button>
+            <button data-topic="workflow"><span><i>#</i> tools & workflow</span><span>01 ↗</span></button>
+          </section>
+          <section class="now-card"><div class="side-heading"><h2><span class="status-dot"></span> Currently</h2><span>/ now</span></div><p>Untangling heap internals.<br>Drinking unreasonable amounts of coffee.</p><div class="now-footer">ONE SEGFAULT AT A TIME<span>↵</span></div></section>
+          <div class="sidebar-note"><span>✳</span><p>A digital garden, not a textbook.<br>Work in progress. Just like me.</p></div>
+        </aside>
+      </div>
+    </main>
+    <footer><a href="#" class="footer-brand">NULLBYTE<span>.</span></a><span>© 2026 YOUR_ALIAS · BUILT WITH CURIOSITY</span><a href="#">Back to surface ↑</a></footer>
+  </div>
+  <dialog id="reader" aria-labelledby="reader-title"><div class="reader-toolbar"><a href="#" class="reader-logo">n_ / field notes</a><button id="close-reader" aria-label="Close article">Close <kbd>esc</kbd> ×</button></div><div id="reader-content"></div></dialog>
+</body>
+</html>
