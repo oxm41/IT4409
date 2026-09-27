@@ -12,7 +12,7 @@ Website sử dụng trực tiếp bộ template Blakletterpress trong `public/`.
 - `public/assets/`: JavaScript, favicon, font tiếng Việt Noto Serif/Noto Sans kèm giấy phép OFL và media mẫu local.
 - [PROMPT.md](PROMPT.md): prompt C–R–A–F–T cho cả ba yêu cầu.
 
-Header, menu HOME / ABOUT / NEWS / BLOG, sidebar và footer lấy từ template gốc; menu vẫn dẫn đến các trang gốc. Cuối nội dung hai trang mới có liên kết đến bài tập còn lại.
+Header, menu HOME / ABOUT / NEWS / BLOG, sidebar và footer lấy từ template gốc. Trong ba trang mới, logo, HOME và các liên kết về trang chủ dẫn tới `index_new.html`; ABOUT / NEWS / BLOG vẫn dẫn tới các trang gốc. Cuối nội dung register/media có liên kết đến bài tập còn lại.
 
 Trang index gốc có bố cục cố định 960px. `index_new.html` giữ cả hành vi này để đối chiếu đúng bản gốc; cải tiến responsive chỉ áp dụng cho register/media. Các trang mới sử dụng icon PNG của template, không dùng emoji; trường nhập trên điện thoại có chữ 16px.
 
