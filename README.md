@@ -10,7 +10,6 @@ Website sử dụng trực tiếp bộ template Blakletterpress trong `public/`.
 - `public/css/semantic.css`: bổ sung selector cho thẻ semantic để giữ cách hiển thị của CSS gốc.
 - `public/css/assignment.css`: form, media và responsive cho hai trang mới, không áp dụng cho index.
 - `public/assets/`: JavaScript, favicon, font tiếng Việt Noto Serif/Noto Sans kèm giấy phép OFL và media mẫu local.
-- [PROMPT.md](PROMPT.md): prompt C–R–A–F–T cho cả ba yêu cầu.
 
 Header, menu HOME / ABOUT / NEWS / BLOG, sidebar và footer lấy từ template gốc. Trong ba trang mới, logo, HOME và các liên kết về trang chủ dẫn tới `index_new.html`; ABOUT / NEWS / BLOG vẫn dẫn tới các trang gốc. Cuối nội dung register/media có liên kết đến bài tập còn lại.
 
