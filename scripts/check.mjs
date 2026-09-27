@@ -3,38 +3,49 @@ import { readFile, stat, readdir } from 'node:fs/promises';
 import { resolve, dirname, sep } from 'node:path';
 
 const root = resolve('public');
-const pages = ['register.html', 'media.html'];
-assert.deepEqual((await readdir(root)).filter(name => name.endsWith('.html')).sort(), [...pages].sort(), 'Website phải có đúng hai trang HTML');
+const pages = ['index.html', 'index_new.html', 'about.html', 'news.html', 'blog.html', 'register.html', 'media.html'];
+const enhanced = new Set(['index_new.html', 'register.html', 'media.html']);
+assert.deepEqual((await readdir(root)).filter(name => name.endsWith('.html')).sort(), [...pages].sort());
+assert.equal(await readFile('baitapHTML/index.html', 'utf8'), await readFile('public/index.html', 'utf8'), 'Original index changed');
 for (const page of pages) {
   const html = await readFile(resolve(root, page), 'utf8');
   assert.match(html, /<!doctype html>/i);
-  assert.match(html, /<html lang="vi">/);
-  assert.equal((html.match(/<main\b/g) || []).length, 1, `${page}: chỉ có một main`);
-  assert.equal((html.match(/<h1\b/g) || []).length, 1, `${page}: chỉ có một h1`);
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
-  assert.equal(new Set(ids).size, ids.length, `${page}: id trùng`);
-  for (const image of html.matchAll(/<img\b[^>]*>/g)) assert.match(image[0], /\balt="[^"]+"/, `${page}: ảnh thiếu alt`);
-  for (const label of html.matchAll(/<label\b[^>]*\bfor="([^"]+)"/g)) assert(ids.includes(label[1]), `${page}: label không có control`);
-  const references = [...html.matchAll(/\b(?:src|href)="([^"]+)"/g)].map(match => match[1]);
-  for (const reference of references) {
-    if (/^https?:\/\//.test(reference)) continue;
+  assert.equal(new Set(ids).size, ids.length, `${page}: duplicate id`);
+  if (enhanced.has(page)) {
+    assert.match(html, /<html lang="(?:vi|en)">/);
+    for (const tag of ['main', 'h1']) assert.equal((html.match(new RegExp(`<${tag}\\b`, 'g')) || []).length, 1, `${page}: one ${tag}`);
+    for (const tag of ['header', 'nav', 'aside', 'footer']) assert.match(html, new RegExp(`<${tag}\\b`));
+    for (const img of html.matchAll(/<img\b[^>]*>/g)) assert.match(img[0], /\balt="[^"]+"/);
+    for (const label of html.matchAll(/<label\b[^>]*\bfor="([^"]+)"/g)) assert(ids.includes(label[1]));
+  }
+  for (const match of html.matchAll(/\b(?:src|href|poster)="([^"]+)"/g)) {
+    const reference = match[1];
+    if (/^(?:https?:|data:|mailto:|\/\/)/.test(reference)) continue;
     const [pathname, fragment] = reference.split('#');
     const file = resolve(root, pathname.split('?')[0] || page);
-    assert(file.startsWith(root + sep), `Asset ngoài public: ${reference}`);
-    assert((await stat(file)).isFile(), `${page}: thiếu ${reference}`);
-    if (fragment && file.endsWith('.html')) {
-      const target = await readFile(file, 'utf8');
-      assert(target.includes(`id="${fragment}"`), `${page}: anchor thiếu ${reference}`);
+    assert(file.startsWith(root + sep), `${page}: asset outside public`);
+    assert((await stat(file)).isFile(), `${page}: missing ${reference}`);
+    if (fragment && file.endsWith('.html')) assert((await readFile(file, 'utf8')).includes(`id="${fragment}"`), `${page}: missing anchor ${reference}`);
+  }
+  console.log(`${page}: structure and local references OK`);
+}
+async function checkCss(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const path = resolve(directory, entry.name);
+    if (entry.isDirectory()) await checkCss(path);
+    else if (entry.name.endsWith('.css')) {
+      for (const match of (await readFile(path, 'utf8')).matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g)) {
+        if (/^(?:https?:|data:)/.test(match[1])) continue;
+        const file = resolve(dirname(path), match[1].split('#')[0].split('?')[0]);
+        assert(file.startsWith(root + sep));
+        assert((await stat(file)).isFile(), `CSS: missing ${match[1]}`);
+      }
     }
   }
-  console.log(`${page}: HTML cơ bản, label, alt và asset hợp lệ`);
 }
-const cssPath = resolve(root, 'assets/site.css');
-const css = await readFile(cssPath, 'utf8');
-for (const match of css.matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g)) {
-  assert((await stat(resolve(dirname(cssPath), match[1]))).isFile(), `CSS: thiếu ${match[1]}`);
-}
+await checkCss(root);
 const config = JSON.parse(await readFile('firebase.json', 'utf8'));
 assert.equal(config.hosting.public, 'public');
-assert.deepEqual(config.hosting.rewrites, [{ source: '/', destination: '/media.html' }]);
-console.log('CSS assets và thư mục Firebase public hợp lệ');
+assert.deepEqual(config.hosting.redirects, [{ source: '/', destination: '/index_new.html', type: 302 }]);
+console.log('Original index, CSS assets and Firebase configuration OK');

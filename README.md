@@ -1,95 +1,53 @@
-# Blakletterpress — hai trang HTML5
+# Bài tập HTML5 — Blakletterpress
 
-Website mới dựng theo hai ảnh minh họa: nền vàng, logo BLP, menu bên trái, sidebar và footer bốn cột. Hai trang dùng chung `public/assets/site.css` và `public/assets/site.js`.
+Website sử dụng trực tiếp bộ template gốc trong `baitapHTML/`. Các file gốc được giữ nguyên, bao gồm `index.html`, `about.html`, `news.html`, `blog.html`, CSS, ảnh và font. Website cũ trong `archive/` không bị sửa và không được push/deploy.
 
-Website NULLBYTE cũ được giữ local trong `archive/`, không push lên GitHub và không thuộc thư mục phục vụ hoặc deploy của website này.
+## Các trang bổ sung
 
-## File của website mới
+- `baitapHTML/index_new.html`: refactor trang index gốc sang `header`, `nav`, `main`, `article`, `aside`, `section`, `figure`, `footer`; bổ sung ngôn ngữ, description, canonical, alt và tên truy cập. Nội dung, ảnh, liên kết và bố cục hiển thị được giữ nguyên.
+- `baitapHTML/register.html`: form ba nhóm thông tin, các trường bắt buộc, mật khẩu ít nhất 8 ký tự, nút Đăng ký/Nhập lại. Chỉ kiểm tra dữ liệu trên trình duyệt, không có backend và không lưu/gửi dữ liệu.
+- `baitapHTML/media.html`: bài “Ngày hội Công nghệ Xanh 2026”, ảnh/chú thích, video có phụ đề, audio, bản đồ Hà Nội và ảnh mùa trước. Nội dung và media là minh họa.
+- `baitapHTML/css/semantic.css`: bổ sung selector cho thẻ semantic để giữ cách hiển thị của CSS gốc.
+- `baitapHTML/css/assignment.css`: form, media và responsive cho hai trang mới, không áp dụng cho index.
+- `baitapHTML/assets/`: JavaScript, favicon, font tiếng Việt Noto Serif/Noto Sans kèm giấy phép OFL và media mẫu local.
+- [PROMPT.md](PROMPT.md): prompt C–R–A–F–T cho cả ba yêu cầu.
 
-```text
-public/
-  register.html
-  media.html
-  assets/
-    site.css
-    site.js
-    icons.svg
-    favicon.svg
-    fonts/
-      unifrakturcook-bold.ttf
-      OFL.txt
-      reading.css
-      noto-serif-*.woff2
-      noto-serif-OFL.txt
-      noto-sans-*.woff2
-      noto-sans-OFL.txt
-    media/
-      event-intro.jpg
-      previous-season.jpg
-      garden.mp4
-      garden-poster.svg
-      garden-captions.vtt
-      podcast-sample.wav
-scripts/
-  serve.mjs
-  check.mjs
-package.json
-package-lock.json
-firebase.json
-.firebaserc
-README.md
-```
+Header, menu HOME / ABOUT / NEWS / BLOG, sidebar và footer lấy từ template gốc; menu vẫn dẫn đến các trang gốc. Cuối nội dung hai trang mới có liên kết đến bài tập còn lại.
 
-Script kiểm tra và ảnh chụp desktop/mobile nằm trong `.checks/`, được Git bỏ qua và không được deploy.
+Trang index gốc có bố cục cố định 960px. `index_new.html` giữ cả hành vi này để đối chiếu đúng bản gốc; cải tiến responsive chỉ áp dụng cho register/media. Các trang mới sử dụng icon PNG của template, không dùng emoji; trường nhập trên điện thoại có chữ 16px.
 
 ## Chạy local trong WSL
 
-Yêu cầu Node.js 18 trở lên. Không cần cài package hoặc chạy bước build.
+Yêu cầu Node.js 18 trở lên; không có dependency runtime.
 
 ```sh
 npm run dev
 ```
 
-- Trang sự kiện: http://localhost:4173/media.html
-- Trang đăng ký: http://localhost:4173/register.html
-- Trang gốc http://localhost:4173/ hiển thị trang sự kiện.
+- Trang semantic: http://localhost:4173/index_new.html
+- Trang gốc: http://localhost:4173/index.html
+- Form: http://localhost:4173/register.html
+- Media: http://localhost:4173/media.html
 
-`npm run preview` chạy cùng bản HTML tĩnh. `npm run check` kiểm tra cấu trúc HTML cơ bản, label, alt, anchor nội bộ, đường dẫn asset và cấu hình thư mục Hosting. Đây không thay thế trình kiểm định HTML đầy đủ hoặc kiểm tra trình duyệt.
-
-## Nội dung
-
-- `public/register.html`: form chia ba fieldset, kiểm tra bắt buộc, email, mật khẩu tối thiểu 8 ký tự, điện thoại 10 chữ số bắt đầu bằng 0, ngày sinh và độ tuổi. Nút Nhập lại dùng reset native. Form không có backend; JavaScript chặn gửi và chỉ báo thông tin hợp lệ. Không lưu dữ liệu, không tạo tài khoản. Nút gửi bị vô hiệu hóa khi JavaScript bị tắt.
-- `public/media.html`: bài viết semantic với ảnh, giới thiệu, video có phụ đề mô tả, audio, bản đồ Hà Nội và ảnh minh họa các mùa trước. Tìm kiếm ở header dẫn tới bài viết và đánh dấu các mục phù hợp; hỗ trợ từ khóa tiếng Việt có hoặc không có dấu.
-- `public/assets/`: CSS/JS, SVG, font và tài nguyên media local. Icon dùng SVG để tránh thay đổi hình dạng emoji trên iPhone. Trường nhập trên mobile dùng chữ 16px để tránh Safari tự phóng to khi focus.
-- `scripts/serve.mjs`: server local chỉ phục vụ `public/`, hỗ trợ MIME và HTTP Range cho video/audio.
-
-Menu HOME / ABOUT / NEWS / BLOG lần lượt dẫn tới trang sự kiện, giới thiệu, video và podcast; không tạo thêm trang HTML ngoài hai trang được yêu cầu. Các biểu tượng mạng xã hội hiện dẫn tới trang chủ nền tảng, chưa cấu hình tài khoản của đơn vị tổ chức.
-
-## Tài nguyên mẫu
-
-Nội dung sự kiện là minh họa. Ảnh/video/audio có chú thích phân biệt với tư liệu sự kiện thật. Tất cả được lưu local, trừ iframe bản đồ:
-
-- Ảnh giới thiệu: [Pexels, ảnh 1181406](https://www.pexels.com/photo/group-of-people-sitting-in-front-of-table-1181406/).
-- Ảnh mùa trước: [Pexels, ảnh 3183150](https://www.pexels.com/photo/group-of-people-sitting-near-table-3183150/). Điều kiện sử dụng ảnh: [Pexels License](https://www.pexels.com/license/).
-- Video vườn hoa: [MDN — flower.mp4, bộ tài nguyên cc0-videos](https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4). Poster SVG và phụ đề tiếng Việt được tạo riêng cho trang.
-- Audio WAV 12 giây: giai điệu tổng hợp tự tạo, không có lời thoại; thay bằng podcast thật khi có nội dung.
-- Font logo: [UnifrakturCook — Google Fonts](https://fonts.google.com/specimen/UnifrakturCook), bản local kèm giấy phép SIL Open Font License trong `public/assets/fonts/OFL.txt`.
-- Font nội dung: Noto Serif, font ô nhập: Noto Sans, có bộ Latin và tiếng Việt; regular/bold theo trục variable, Noto Serif có italic riêng. Tất cả là WOFF2 local trong `public/assets/fonts/`, kèm giấy phép OFL. Nội dung dùng giãn dòng rộng cho dấu tiếng Việt; footer căn trái để tránh khoảng trắng lớn giữa các từ.
-- Bản đồ: [Google Maps — Hà Nội](https://www.google.com/maps/search/?api=1&query=Hanoi), cần kết nối mạng. Liên kết mở bản đồ lớn luôn có dưới iframe.
-
-Khi thay media, giữ tên file hoặc cập nhật `src`, `poster`, `track`, `alt` và chú thích trong HTML. Không cần thay CSS.
-
-## Firebase Hosting
-
-`firebase.json` chỉ deploy `public/`, giữ đường dẫn `/register.html` và `/media.html`; trang gốc được rewrite tới `/media.html`. `archive/` không được đưa lên Hosting. `.firebaserc` dùng project hiện tại `personal-blog-dd5ad` để tiếp tục dùng custom domain đã kết nối.
-
-Workflow `.github/workflows/firebase-hosting-merge.yml` kiểm tra website rồi deploy lên Hosting khi push vào `main`; cũng có thể chạy bằng nút **Run workflow** trong GitHub Actions. Workflow dùng secret đã cấu hình `FIREBASE_SERVICE_ACCOUNT_PERSONAL_BLOG_DD5AD`.
-
-Khi muốn đưa website mới lên domain, chạy trong WSL:
+`npm run dev` và `npm run preview` chạy build trước khi mở server. `npm run build` tạo lại `public/` từ `baitapHTML/`, không sửa nguồn; các trang ví dụ lỗi `*_wrong.html` không được đưa vào output. Khi chỉnh web, sửa trong `baitapHTML/`, không sửa bản sao `public/`.
 
 ```sh
+npm run build
+npm run check
+```
+
+Kiểm tra tự động xác nhận các trang, cấu trúc semantic, label, alt, ID, asset, anchor nội bộ, CSS và cấu hình Hosting. `public/index.html` phải giống hệt nguồn. Các kiểm tra trình duyệt, HTML validator và ảnh đối chiếu nằm local trong `.checks/`, không deploy.
+
+## Asset và Hosting
+
+Ảnh, logo và font giao diện gốc giữ từ Free Website Templates, bao gồm attribution trong footer. Video mẫu vườn hoa từ bộ CC0 của MDN; audio là giai điệu tổng hợp 12 giây. Font Noto local có giấy phép trong `assets/fonts/`. Bản đồ Google Maps cần mạng và có liên kết mở bản đồ bên dưới.
+
+Firebase Hosting dùng project `personal-blog-dd5ad` và chỉ xuất bản `public/`. Đường dẫn `/` chuyển đến `/index_new.html`; `/index.html` vẫn giữ bản gốc để so sánh. Domain hiện tại: https://maidt2416271.id.vn/.
+
+Workflow `.github/workflows/firebase-hosting-merge.yml` chạy build, kiểm tra rồi deploy khi push `main`; cũng hỗ trợ Run workflow. Deploy thủ công trong WSL:
+
+```sh
+npm run build
 npm run check
 npx firebase-tools deploy --only hosting
 ```
-
-Không cần bước build. Nếu CLI chưa đăng nhập, chạy `npx firebase-tools login --no-localhost` trước. Deploy này sẽ thay website đang hiển thị trên cùng Firebase Hosting site; mã nguồn website cũ trong `archive/` vẫn được giữ lại.

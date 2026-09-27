@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Hai trang HTML5 theo giao diện Blakletterpress.",
+  "description": "Bài tập HTML5 dựa trên template Blakletterpress gốc.",
   "engines": { "node": ">=18" },
   "scripts": {
-    "dev": "node scripts/serve.mjs",
-    "preview": "node scripts/serve.mjs",
+    "dev": "npm run build && node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "npm run build && node scripts/serve.mjs",
     "check": "node scripts/check.mjs"
   }
 }

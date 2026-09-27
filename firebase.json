@@ -4,7 +4,7 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": false,
     "trailingSlash": false,
-    "rewrites": [{ "source": "/", "destination": "/media.html" }],
+    "redirects": [{ "source": "/", "destination": "/index_new.html", "type": 302 }],
     "headers": [
       {
         "source": "**/*.html",

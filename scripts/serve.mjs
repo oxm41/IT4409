@@ -5,7 +5,7 @@ import { resolve, sep, extname } from 'node:path';
 
 const root = resolve('public');
 const port = Number(process.env.PORT || 4173);
-const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.mp4': 'video/mp4', '.wav': 'audio/wav', '.vtt': 'text/vtt; charset=utf-8', '.ttf': 'font/ttf', '.woff2': 'font/woff2' };
+const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.mp4': 'video/mp4', '.wav': 'audio/wav', '.vtt': 'text/vtt; charset=utf-8', '.ttf': 'font/ttf', '.otf': 'font/otf', '.woff': 'font/woff', '.woff2': 'font/woff2', '.eot': 'application/vnd.ms-fontobject' };
 
 createServer(async (request, response) => {
   try {
@@ -14,7 +14,7 @@ createServer(async (request, response) => {
       return;
     }
     const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-    const file = resolve(root, '.' + (pathname === '/' ? '/media.html' : pathname));
+    const file = resolve(root, '.' + (pathname === '/' ? '/index_new.html' : pathname));
     if (!file.startsWith(root + sep)) throw new Error('Invalid path');
     const info = await stat(file);
     if (!info.isFile()) throw new Error('Not a file');
@@ -45,4 +45,6 @@ createServer(async (request, response) => {
 }).listen(port, '0.0.0.0', () => {
   console.log(`Trang sự kiện: http://localhost:${port}/media.html`);
   console.log(`Trang đăng ký: http://localhost:${port}/register.html`);
+  console.log(`Trang chủ semantic: http://localhost:${port}/index_new.html`);
+  console.log(`Trang gốc: http://localhost:${port}/index.html`);
 });
