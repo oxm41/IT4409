@@ -6,9 +6,8 @@
   "description": "Bài tập HTML5 dựa trên template Blakletterpress gốc.",
   "engines": { "node": ">=18" },
   "scripts": {
-    "dev": "npm run build && node scripts/serve.mjs",
-    "build": "node scripts/build.mjs",
-    "preview": "npm run build && node scripts/serve.mjs",
+    "dev": "node scripts/serve.mjs",
+    "preview": "node scripts/serve.mjs",
     "check": "node scripts/check.mjs"
   }
 }

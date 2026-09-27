@@ -18,7 +18,7 @@ Tôi cần hoàn thành ba công việc:
 
 Nếu thiếu `index.html` gốc hoặc không đọc được ảnh minh họa, hãy báo chính xác tài nguyên thiếu và hỏi lại trước khi triển khai phần phụ thuộc. **Không tự tạo một trang mới rồi gọi đó là bản refactor giữ nguyên trang gốc.**
 
-Nguồn chính xác nằm trong `baitapHTML/`: `index.html`, `about.html`, `news.html`, `blog.html`, `css/style.css`, `images/`, `fonts/`. Tạo ba trang mới trong thư mục này; giữ nguyên byte của mọi file gốc. `public/` là output tạo bởi `npm run build`, không sửa trực tiếp output. Không sửa, di chuyển hoặc lấy nội dung trong `archive/` làm nguồn cho bài tập.
+Nguồn chính xác nằm trong `public/`: `index.html`, `about.html`, `news.html`, `blog.html`, `css/style.css`, `images/`, `fonts/`. Tạo hoặc sửa ba trang bài tập ngay trong thư mục này; giữ nguyên byte của mọi file gốc. Website tĩnh không cần build và được deploy trực tiếp từ `public/`. Không sửa, di chuyển hoặc lấy nội dung trong `archive/` làm nguồn cho bài tập.
 
 ## R — Role
 
@@ -120,7 +120,7 @@ Sau triển khai:
 3. Đối chiếu nội dung text, ảnh, liên kết và tương tác của hai bản index.
 4. Chụp và so sánh hai bản ở cùng kích thước desktop và mobile; báo sai lệch bố cục nếu có.
 5. Kiểm tra HTML, CSS, asset, anchor, console, keyboard, form và khả năng phát video/audio.
-6. Chạy build và cập nhật kiểm tra tự động cho bảy trang: index, index_new, about, news, blog, register, media. Các ví dụ *_wrong.html chỉ giữ trong nguồn, không xuất bản. Xác minh mọi file gốc không bị thay đổi.
+6. Chạy `npm run check` cho bảy trang trong `public/`: index, index_new, about, news, blog, register, media. Không cần bước build. Xác minh mọi file gốc không bị thay đổi.
 7. Không ghi đè `index.html` gốc bằng bản refactor, không chỉnh sửa `archive/`. Không commit/push/deploy nếu chưa có yêu cầu hoặc ủy quyền tương ứng trong phiên làm việc.
 
 Nếu chưa có trang index gốc, hãy hoàn thành phần độc lập và báo phần refactor còn chờ nguồn, không tuyên bố cả ba công việc đã hoàn tất.

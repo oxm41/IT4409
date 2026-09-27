@@ -27,7 +27,6 @@ jobs:
       - name: Validate website
         run: |
           npm ci
-          npm run build
           npm run check
           node --check public/assets/site.js
       - name: Deploy live website
