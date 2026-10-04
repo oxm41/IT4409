@@ -44,6 +44,15 @@ async function checkCss(directory) {
   }
 }
 await checkCss(root);
+for (const [number, folder] of [[1, 'bai-1'], [2, 'bai-2']]) {
+  const source = resolve('assignment_3', `Bai tap ${number} Tim va sua loi CSS`);
+  const hosted = resolve(root, 'assignment_3', folder);
+  const files = ['trang.html', 'style-loi.css', ...(await readdir(resolve(source, 'images'))).map(name => `images/${name}`)];
+  for (const file of files) {
+    assert.deepEqual(await readFile(resolve(hosted, file)), await readFile(resolve(source, file)), `${folder}: hosted copy differs: ${file}`);
+  }
+  console.log(`${folder}: HTML, CSS and images match source`);
+}
 const config = JSON.parse(await readFile('firebase.json', 'utf8'));
 assert.equal(config.hosting.public, 'public');
 assert.deepEqual(config.hosting.redirects, [{ source: '/', destination: '/index_new.html', type: 302 }]);
