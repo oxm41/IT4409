@@ -48,6 +48,7 @@ danhSachTin.addEventListener("click", (e) => {
 	const doanVan = nut.closest("li").querySelector("p");
 	const daMo = doanVan.classList.toggle("day-du");
 	nut.textContent = daMo ? "Thu gọn <<" : "Read more >>";
+	nut.setAttribute("aria-expanded", String(daMo));
 });
 
 // F5. Nút #nut-dang: kiểm tra dữ liệu, tạo <li> mới, chèn vào đầu #list.

@@ -1,0 +1,7 @@
+/* Read more trong cột tin phụ: thu gọn còn hai dòng. */
+#posts p.tom-tat-tin-phu {
+	max-height: 48px;
+	overflow: hidden;
+	padding-bottom: 0;
+}
+#posts p.tom-tat-tin-phu.day-du { max-height: none; }
