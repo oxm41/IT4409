@@ -1,6 +1,6 @@
 # Bài tập HTML5 — Blakletterpress
 
-Website sử dụng trực tiếp bộ template Blakletterpress trong `public/`. Đây là thư mục nguồn duy nhất và cũng là thư mục deploy. Các trang gốc `index.html`, `about.html`, `news.html`, `blog.html`, CSS, ảnh và font được giữ lại. Website cũ trong `archive/` không bị sửa và không được push/deploy.
+Website sử dụng trực tiếp bộ template Blakletterpress trong `public/`. GitHub Pages xuất bản các file trong thư mục này đã được theo dõi bằng Git. Các trang gốc `index.html`, `about.html`, `news.html`, `blog.html`, CSS, ảnh và font được giữ lại. Website cũ trong `archive/` không bị sửa và không được push/deploy.
 
 ## Các trang bổ sung
 
@@ -40,11 +40,20 @@ Kiểm tra tự động xác nhận các trang, cấu trúc semantic, label, alt
 
 Ảnh, logo và font giao diện gốc giữ từ Free Website Templates, bao gồm attribution trong footer. Video mẫu vườn hoa từ bộ CC0 của MDN; audio là giai điệu tổng hợp 12 giây. Font Noto local có giấy phép trong `assets/fonts/`. Bản đồ Google Maps cần mạng và có liên kết mở bản đồ bên dưới.
 
-Firebase Hosting dùng project `personal-blog-dd5ad` và chỉ xuất bản `public/`. Đường dẫn `/` chuyển đến `/index_new.html`; `/index.html` vẫn giữ bản gốc để so sánh. Domain hiện tại: https://maidt2416271.id.vn/.
+Website hiện xuất bản tại https://oxm41.github.io/IT4409/. Đường dẫn gốc chuyển đến `index_new.html`. Trên GitHub Pages, bản index gốc được giữ tại `index_original.html` để đối chiếu; `public/index.html` trong repo vẫn giữ nguyên.
 
-Workflow `.github/workflows/firebase-hosting-merge.yml` kiểm tra rồi deploy trực tiếp `public/` khi push `main`; cũng hỗ trợ Run workflow. Deploy thủ công trong WSL:
+Workflow `.github/workflows/github-pages.yml` kiểm tra và deploy khi push `main`; cũng hỗ trợ Run workflow. Trong Settings → Pages, Source là GitHub Actions. Bản xuất bản được tạo trong `.checks/pages/`, chỉ chứa file đã được Git theo dõi, không lấy các bài làm chưa commit hay file cấu hình Firebase.
 
 ```sh
 npm run check
-npx firebase-tools deploy --only hosting
+npm run build:pages
 ```
+
+Các link bài tập:
+
+- Bài 2 — Home: https://oxm41.github.io/IT4409/assignment_4/bai-2/index.html
+- Bài 2 — News: https://oxm41.github.io/IT4409/assignment_4/bai-2/news.html
+- Bài 3 — Home: https://oxm41.github.io/IT4409/assignment_4/bai-3/index.html
+- Bài 3 — News: https://oxm41.github.io/IT4409/assignment_4/bai-3/news.html
+
+`firebase.json` và `.firebaserc` giữ lại làm cấu hình cũ; workflow không còn deploy Firebase tự động.
