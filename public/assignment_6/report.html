@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Báo cáo React CRUD: component tree, state lifting, bảng props và cách sửa lỗi render.">
+<title>Báo cáo Bài 6 — React CRUD</title><link rel="stylesheet" href="./report.css">
+</head>
+<body>
+<nav class="report-nav" aria-label="Tài liệu"><a href="./">← Mở ứng dụng</a><a href="./bao-cao-react-crud.pdf" download>Tải báo cáo PDF ↓</a></nav>
+<main>
+<section class="sheet" aria-labelledby="overview">
+<header class="page-header"><span>BÀI TẬP 06 / REACT</span><span>BÁO CÁO KẾT QUẢ · 22.11.2026</span></header>
+<p class="eyebrow">01 / CẤU TRÚC ỨNG DỤNG</p>
+<h1 id="overview">Quản lý người dùng<br><em>với React CRUD.</em></h1>
+<p class="lead">Ứng dụng tải danh sách người dùng từ JSONPlaceholder, tìm theo họ tên hoặc tên đăng nhập, thêm người dùng, chỉnh sửa hồ sơ và xóa trực tiếp.</p>
+<h2>Sơ đồ cây Component</h2>
+<figure class="diagram">
+<svg viewBox="0 0 680 226" role="img" aria-labelledby="tree-title tree-desc">
+<title id="tree-title">Cây component React</title><desc id="tree-desc">createRoot render App. App có ba component con: SearchForm, AddUser và ResultTable.</desc>
+<path class="connector" d="M340 76 V112 H116 V144 M340 112 V144 M340 112 H564 V144"/>
+<rect class="node root" x="231" y="12" width="218" height="64" rx="10"/><text class="node-title inverse" x="340" y="39">App</text><text class="node-sub inverse" x="340" y="59">kw · newUser</text>
+<rect class="node" x="14" y="144" width="204" height="66" rx="10"/><text class="node-title" x="116" y="171">SearchForm</text><text class="node-sub" x="116" y="192">nhập từ khóa</text>
+<rect class="node" x="238" y="144" width="204" height="66" rx="10"/><text class="node-title" x="340" y="171">AddUser</text><text class="node-sub" x="340" y="192">form thêm · bản nháp</text>
+<rect class="node" x="462" y="144" width="204" height="66" rx="10"/><text class="node-title" x="564" y="171">ResultTable</text><text class="node-sub" x="564" y="192">danh sách · sửa · xóa</text>
+</svg>
+<figcaption><code>main.jsx</code> gọi <code>createRoot(...).render(&lt;App /&gt;)</code>. Các input được tạo bằng hàm hỗ trợ <code>renderFields()</code>; hàm này không phải component riêng.</figcaption>
+</figure>
+<figure class="app-shot"><img src="./images/app-desktop.png" alt="Ứng dụng React CRUD trên desktop với ô tìm kiếm, nút thêm và bảng người dùng" width="1440" height="1000"><figcaption>Giao diện thực tế: danh sách tải từ API, thao tác sửa/xóa trên từng dòng.</figcaption></figure>
+<footer class="page-number"><span>REACT 18 · FUNCTIONAL COMPONENTS</span><span>01 / 04</span></footer>
+</section>
+<section class="sheet" aria-labelledby="lifting">
+<header class="page-header"><span>BÀI TẬP 06 / REACT</span><span>LUỒNG DỮ LIỆU</span></header>
+<p class="eyebrow">02 / STATE LIFTING</p><h1 id="lifting">Chia sẻ state<br><em>qua component cha.</em></h1>
+<figure class="diagram flow">
+<svg viewBox="0 0 680 325" role="img" aria-labelledby="flow-title flow-desc">
+<title id="flow-title">Luồng dữ liệu một chiều và callback</title><desc id="flow-desc">SearchForm gửi từ khóa lên App qua onChangeValue. AddUser gửi người dùng qua onAdd. App truyền keyword và user xuống ResultTable. ResultTable gọi onAdded để App đặt newUser về null.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#116d5b"/></marker></defs>
+<rect class="node" x="10" y="18" width="180" height="58" rx="9"/><text class="node-title" x="100" y="53">SearchForm</text>
+<rect class="node" x="10" y="155" width="180" height="58" rx="9"/><text class="node-title" x="100" y="190">AddUser</text>
+<rect class="node root" x="260" y="81" width="160" height="92" rx="9"/><text class="node-title inverse" x="340" y="113">App</text><text class="node-sub inverse" x="340" y="137">kw · newUser</text><text class="node-sub inverse" x="340" y="157">nguồn state chung</text>
+<rect class="node" x="490" y="97" width="180" height="64" rx="9"/><text class="node-title" x="580" y="135">ResultTable</text>
+<path class="flow-arrow" d="M190 47 H340 V81"/><text class="edge-label" x="231" y="30">onChangeValue(value)</text>
+<path class="flow-arrow" d="M190 184 H232 V154 H260"/><text class="edge-label" x="145" y="239">onAdd(draft)</text>
+<path class="flow-arrow" d="M420 111 H490"/><text class="edge-label" x="489" y="73">keyword={kw}</text><text class="edge-label" x="485" y="90">user={newUser}</text>
+<path class="flow-arrow dashed" d="M580 161 V280 H340 V173"/><text class="edge-label" x="485" y="304">onAdded() → newUser = null</text>
+</svg>
+<figcaption>Mũi tên liền: dữ liệu qua callback hoặc props. Mũi tên đứt: xác nhận đã thêm để xóa hồ sơ chờ trong App.</figcaption>
+</figure>
+<h2>Vì sao đặt <code>kw</code> ở App?</h2>
+<p><code>SearchForm</code> nhận thao tác nhập, còn <code>ResultTable</code> dùng từ khóa để lọc. Hai component là anh em nên không truyền state trực tiếp cho nhau. App là cha chung gần nhất: nhận giá trị qua <code>onChangeValue</code>, cập nhật <code>kw</code>, rồi truyền xuống bảng bằng prop <code>keyword</code>.</p>
+<h2>Vì sao đặt <code>newUser</code> ở App?</h2>
+<p><code>AddUser</code> tạo hồ sơ nhưng danh sách nằm trong <code>ResultTable</code>. Khi gửi form hợp lệ, AddUser gọi <code>onAdd</code>; App cập nhật <code>newUser</code> và truyền qua prop <code>user</code>. Bảng thêm hồ sơ rồi gọi <code>onAdded()</code> để đặt lại <code>newUser = null</code>.</p>
+<aside class="callout"><strong>Chỉ nâng state cần chia sẻ.</strong> Bản nháp và trạng thái mở form vẫn nằm trong AddUser; danh sách, trạng thái tải và bản đang sửa nằm trong ResultTable. <code>newUser</code> là hồ sơ đang chờ tiếp nhận, không phải toàn bộ danh sách.</aside>
+<footer class="page-number"><span>DỮ LIỆU ĐI XUỐNG · SỰ KIỆN ĐI LÊN</span><span>02 / 04</span></footer>
+</section>
+<section class="sheet" aria-labelledby="props">
+<header class="page-header"><span>BÀI TẬP 06 / REACT</span><span>GIAO TIẾP GIỮA COMPONENT</span></header>
+<p class="eyebrow">03 / PROPS VÀ XỬ LÝ DỮ LIỆU</p><h1 id="props">Props từ App<br><em>xuống component con.</em></h1>
+<table class="props-table"><caption>Các props thực tế trong mã nguồn</caption><thead><tr><th>Component</th><th>Prop / kiểu</th><th>Giá trị từ App &amp; vai trò</th></tr></thead><tbody>
+<tr><td>SearchForm</td><td><code>onChangeValue</code><br>function</td><td><code>setKeyword</code>. Được gọi khi nhập để cập nhật từ khóa chung.</td></tr>
+<tr><td>AddUser</td><td><code>onAdd</code><br>function</td><td><code>setNewUser</code>. Nhận object hồ sơ sau khi form hợp lệ.</td></tr>
+<tr><td>AddUser</td><td><code>pending</code><br>boolean</td><td><code>newUser !== null</code>. Tạm khóa nút thêm khi hồ sơ trước đang chờ API tải xong.</td></tr>
+<tr><td>ResultTable</td><td><code>keyword</code><br>string</td><td><code>kw</code>. Lọc theo <code>name</code> hoặc <code>username</code>, không phân biệt hoa thường.</td></tr>
+<tr><td>ResultTable</td><td><code>user</code><br>object | null</td><td><code>newUser</code>. Hồ sơ mới chuyển từ AddUser qua App.</td></tr>
+<tr><td>ResultTable</td><td><code>onAdded</code><br>function</td><td><code>handleAdded</code>. Callback ổn định bằng <code>useCallback</code>, đặt <code>newUser</code> về <code>null</code> sau khi thêm.</td></tr>
+</tbody></table>
+<h2>Thực hiện CRUD</h2>
+<table><thead><tr><th>Thao tác</th><th>Cách xử lý</th></tr></thead><tbody>
+<tr><td>Read</td><td><code>useEffect</code> gọi <code>fetch</code> lấy 10 người dùng; hiển thị loading và có nút thử lại khi lỗi.</td></tr>
+<tr><td>Create</td><td>Thêm object bằng <code>[...prev, newUser]</code>; cấp ID bằng ID lớn nhất hiện có cộng 1.</td></tr>
+<tr><td>Update</td><td>Sao chép object và <code>address</code> khi mở form. Lưu bằng <code>map</code>; Hủy bỏ bản nháp, không sửa dữ liệu gốc.</td></tr>
+<tr><td>Delete</td><td>Dùng <code>filter</code> loại dòng theo ID ngay khi bấm Xóa, không hỏi xác nhận.</td></tr>
+</tbody></table>
+<p class="small">Effect tiếp nhận hồ sơ chỉ chạy khi dữ liệu ban đầu đã tải thành công. Vì vậy, hồ sơ thêm trong lúc đang tải không bị kết quả API ghi đè. <code>onAdded</code> xác nhận tiếp nhận và xóa hồ sơ chờ.</p>
+<aside class="callout"><strong>Phạm vi bài thực hành:</strong> API cung cấp dữ liệu mẫu ban đầu. Thêm, sửa, xóa được lưu trong React state của trang hiện tại; tải lại trang sẽ khôi phục dữ liệu API. Không có backend lưu thay đổi.</aside>
+<footer class="page-number"><span>THAM CHIẾU: src/App.jsx · src/ResultTable.jsx</span><span>03 / 04</span></footer>
+</section>
+<section class="sheet" aria-labelledby="error">
+<header class="page-header"><span>BÀI TẬP 06 / REACT</span><span>LỖI VÀ KIỂM CHỨNG</span></header>
+<p class="eyebrow">04 / LỖI ĐÃ TÁI HIỆN</p><h1 id="error">Gọi setter<br><em>ngay khi render.</em></h1>
+<p>Khi kiểm tra đoạn nút Hủy ở trang 6 của tài liệu mẫu, em chạy lại cách gán <code>onClick</code> bên dưới và tái hiện lỗi:</p>
+<pre class="error-message">Too many re-renders. React limits the number of renders to prevent an infinite loop.</pre>
+<div class="code-pair"><div><h2>Đoạn gây lỗi</h2><pre><code>&lt;button onClick={setAdding(false)}&gt;
+  Hủy
+&lt;/button&gt;</code></pre></div><div><h2>Cách sửa</h2><pre><code>&lt;button type="button"
+  onClick={() =&gt; setAdding(false)}&gt;
+  Hủy
+&lt;/button&gt;</code></pre></div></div>
+<p><strong>Nguyên nhân:</strong> <code>setAdding(false)</code> thực thi trong lúc React render, thay vì đợi người dùng bấm. Setter yêu cầu render lại và lại bị gọi, tạo vòng lặp. Cần truyền một hàm callback cho <code>onClick</code>.</p>
+<p><strong>Áp dụng:</strong> nút Hủy dùng <code>onClick={closeForm}</code>. Hàm này đóng dialog; sự kiện <code>onClose</code> mới cập nhật state và xóa bản nháp. Lỗi mẫu được giữ trong kiểm thử riêng với <code>assert.throws</code>, không đưa vào ứng dụng đã deploy.</p>
+<h2>Kết quả kiểm tra</h2>
+<table><thead><tr><th>Nhóm</th><th>Kết quả</th></tr></thead><tbody>
+<tr><td>Node tests</td><td>5/5 đạt: lọc, sao chép địa chỉ, ID sau xóa, kiểm tra đầu vào và tái hiện lỗi mẫu.</td></tr>
+<tr><td>Trình duyệt</td><td>6/6 đạt: tìm kiếm, CRUD, hủy form, gửi khi đang tải, API lỗi/thử lại, responsive 390 px.</td></tr>
+<tr><td>Dữ liệu API</td><td>Kiểm tra API thật, form và lỗi console trên bản đã host. Test tự động dùng dữ liệu giả lập để kết quả ổn định.</td></tr>
+</tbody></table>
+<h2>Liên kết kết quả và nguồn tham khảo</h2>
+<p class="links"><a href="https://oxm41.github.io/IT4409/assignment_6/">Ứng dụng: oxm41.github.io/IT4409/assignment_6/</a><br><a href="https://oxm41.github.io/IT4409/assignment_6/report.html">Báo cáo: oxm41.github.io/IT4409/assignment_6/report.html</a><br><a href="https://github.com/oxm41/IT4409/tree/main/assignment_6/react-crud">Mã nguồn: GitHub / assignment_6/react-crud</a></p>
+<p class="small">Đề: <cite>Ex. React-CRUD - 20261.pdf</cite>, 8 trang. Tài liệu: <a href="https://react.dev/learn/sharing-state-between-components">Sharing State Between Components</a> và <a href="https://react.dev/learn/responding-to-events">Responding to Events</a>. API: <a href="https://jsonplaceholder.typicode.com/users">JSONPlaceholder /users</a>.</p>
+<footer class="page-number"><span>BÁO CÁO KẾT QUẢ / REACT CRUD</span><span>04 / 04</span></footer>
+</section>
+</main>
+</body>
+</html>

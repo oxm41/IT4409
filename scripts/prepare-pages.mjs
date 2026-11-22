@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { copyFile, mkdir, rm, writeFile } from 'node:fs/promises';
+import { copyFile, cp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve, sep } from 'node:path';
 
 const output = resolve('.checks/pages');
@@ -17,6 +17,9 @@ for (const file of files) {
   await mkdir(dirname(target), { recursive: true });
   await copyFile(file, target);
 }
+
+// React is bundled separately; the report is copied from tracked public files above.
+await cp(resolve('assignment_6/react-crud/dist'), resolve(output, 'assignment_6'), { recursive: true });
 
 // Pages serves index.html for /. Keep the original template for comparison.
 await copyFile(resolve('public/index.html'), resolve(output, 'index_original.html'));

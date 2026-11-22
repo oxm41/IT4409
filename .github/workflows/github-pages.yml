@@ -29,9 +29,14 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            assignment_6/react-crud/package-lock.json
       - name: Validate and prepare website
         run: |
           npm ci
+          npm ci --prefix assignment_6/react-crud
+          npm test --prefix assignment_6/react-crud
           npm run check
           node --check public/assets/site.js
           npm run build:pages

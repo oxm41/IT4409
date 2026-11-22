@@ -9,6 +9,6 @@
     "dev": "node scripts/serve.mjs",
     "preview": "node scripts/serve.mjs",
     "check": "node scripts/check.mjs",
-    "build:pages": "node scripts/prepare-pages.mjs"
+    "build:pages": "npm --prefix assignment_6/react-crud run build && node scripts/prepare-pages.mjs"
   }
 }

@@ -35,7 +35,8 @@ async function checkCss(directory) {
     if (entry.isDirectory()) await checkCss(path);
     else if (entry.name.endsWith('.css')) {
       for (const match of (await readFile(path, 'utf8')).matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g)) {
-        if (/^(?:https?:|data:)/.test(match[1])) continue;
+        // A fragment such as url(#arrow) refers to an inline SVG, not an asset file.
+        if (/^(?:https?:|data:|#)/.test(match[1])) continue;
         const file = resolve(dirname(path), match[1].split('#')[0].split('?')[0]);
         assert(file.startsWith(root + sep));
         assert((await stat(file)).isFile(), `CSS: missing ${match[1]}`);
